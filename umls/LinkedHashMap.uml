@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>java.util.LinkedHashMap</OriginalElement>
+  <nodes>
+    <node x="501.89369658119654" y="282.0">java.util.LinkedHashMap</node>
+    <node x="832.0" y="31.0">java.util.LinkedHashMap.LinkedEntryIterator</node>
+    <node x="489.6826923076923" y="162.0">java.util.LinkedHashMap.LinkedValues</node>
+    <node x="217.0" y="31.0">java.util.LinkedHashMap.LinkedValueIterator</node>
+    <node x="312.6826923076923" y="162.0">java.util.LinkedHashMap.LinkedKeySet</node>
+    <node x="0.0" y="31.0">java.util.LinkedHashMap.LinkedKeyIterator</node>
+    <node x="706.1826923076924" y="162.0">java.util.LinkedHashMap.LinkedEntrySet</node>
+    <node x="589.0" y="0.0">java.util.LinkedHashMap.Entry</node>
+    <node x="619.3936965811965" y="506.0">java.util.LinkedHashMap.LinkedHashIterator</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.util.LinkedHashMap.LinkedValues" target="java.util.LinkedHashMap">
+      <point x="39.25" y="20.0" />
+      <point x="607.4326923076924" y="262.0" />
+      <point x="606.3936965811965" y="262.0" />
+      <point x="-19.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedValueIterator" target="java.util.LinkedHashMap.LinkedHashIterator">
+      <point x="-71.0" y="20.0" />
+      <point x="252.5" y="142.0" />
+      <point x="131.54433760683764" y="142.0" />
+      <point x="131.54433760683764" y="476.0" />
+      <point x="679.1436965811965" y="476.0" />
+      <point x="-59.75" y="-66.5" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedKeyIterator" target="java.util.LinkedHashMap">
+      <point x="0.0" y="20.0" />
+      <point x="98.5" y="132.0" />
+      <point x="147.04433760683764" y="132.0" />
+      <point x="147.04433760683764" y="262.0" />
+      <point x="511.39369658119654" y="262.0" />
+      <point x="-114.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.Entry" target="java.util.LinkedHashMap">
+      <point x="-49.55555555555554" y="51.0" />
+      <point x="650.9444444444445" y="142.0" />
+      <point x="657.1826923076924" y="142.0" />
+      <point x="657.1826923076924" y="232.0" />
+      <point x="625.3936965811965" y="232.0" />
+      <point x="0.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedEntrySet" target="java.util.LinkedHashMap">
+      <point x="43.25" y="20.0" />
+      <point x="835.9326923076924" y="252.0" />
+      <point x="720.3936965811965" y="252.0" />
+      <point x="95.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedKeyIterator" target="java.util.LinkedHashMap.LinkedHashIterator">
+      <point x="-65.66666666666663" y="20.0" />
+      <point x="32.83333333333337" y="142.0" />
+      <point x="72.0" y="142.0" />
+      <point x="72.0" y="486.0" />
+      <point x="639.3103632478632" y="486.0" />
+      <point x="-99.58333333333337" y="-66.5" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedEntryIterator" target="java.util.LinkedHashMap.LinkedHashIterator">
+      <point x="71.0" y="20.0" />
+      <point x="1009.5" y="142.0" />
+      <point x="949.5" y="142.0" />
+      <point x="949.5" y="486.0" />
+      <point x="838.4770299145299" y="486.0" />
+      <point x="99.58333333333334" y="-66.5" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedEntryIterator" target="java.util.LinkedHashMap">
+      <point x="0.0" y="20.0" />
+      <point x="938.5" y="262.0" />
+      <point x="739.3936965811965" y="262.0" />
+      <point x="114.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedKeySet" target="java.util.LinkedHashMap">
+      <point x="39.25" y="20.0" />
+      <point x="430.4326923076923" y="232.0" />
+      <point x="568.3936965811965" y="232.0" />
+      <point x="-57.0" y="-82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedHashIterator" target="java.util.LinkedHashMap">
+      <point x="-19.91666666666663" y="-66.5" />
+      <point x="718.9770299145299" y="466.0" />
+      <point x="625.3936965811965" y="466.0" />
+      <point x="0.0" y="82.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap.LinkedValueIterator" target="java.util.LinkedHashMap">
+      <point x="0.0" y="20.0" />
+      <point x="323.5" y="142.0" />
+      <point x="272.36324786324786" y="142.0" />
+      <point x="272.36324786324786" y="252.0" />
+      <point x="530.3936965811965" y="252.0" />
+      <point x="-95.0" y="-82.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="629.0" y="361.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
