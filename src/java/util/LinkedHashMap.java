@@ -190,7 +190,15 @@ public class LinkedHashMap<K,V>
      * HashMap.Node subclass for normal LinkedHashMap entries.
      */
     static class Entry<K,V> extends HashMap.Node<K,V> {
-        Entry<K,V> before, after;
+        /**
+         *   这两个字段，是用来给迭代时使用的，相当于一个双向链表，
+         *   实际上用的时候，操作LinkedHashMap的entry和操作HashMap的Entry是一样的，只操作相同的四个属性，
+         *   这两个字段是由linkedHashMap中一些方法所操作。LinkedHashMap的很多方法度是直接继承自HashMap。
+         *  before：指向前一个entry元素。after：指向后一个entry元素
+         */
+        Entry<K,V> before,
+                after;
+        //使用的是HashMap的Entry构造
         Entry(int hash, K key, V value, Node<K,V> next) {
             super(hash, key, value, next);
         }
@@ -213,6 +221,12 @@ public class LinkedHashMap<K,V>
      * for access-order, <tt>false</tt> for insertion-order.
      *
      * @serial
+     */
+    /**
+     * 用来指定LinkedHashMap的迭代顺序，
+     * true则表示按照基于访问的顺序来排列，意思就是最近使用的entry，放在链表的最末尾
+     * false则表示按照插入顺序来
+     * 注意：accessOrder的final关键字，说明我们要在构造方法里给它初始化。
      */
     final boolean accessOrder;
 
