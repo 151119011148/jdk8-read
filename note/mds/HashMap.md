@@ -2,7 +2,9 @@ HashMap简介
 类图如下:
 
 ![HashMap](../images/HashMap.png)
+
 HashMap 是一个散列表，它存储的内容是键值对(key-value)映射，该类继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。
+
 HashMap 的实现不是同步的，这意味着它不是线程安全的。它的key、value都可以为null。此外，HashMap中的映射不是有序的。
  
 HashMap有两个参数影响其性能：“初始容量” 和 “加载因子”。容量是哈希表中桶的数量，初始容量DEFAULT_INITIAL_CAPACITY  只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行 rehash 操作（即重建内部数据结构），从而哈希表将具有大约两倍的桶数。
@@ -92,13 +94,24 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 
 putVal方法可以总结如下：
-一，如果table为null或者table大小为0，调用resize来初始化table
-二，hash到的桶还没有保存结点，直接保存到tab[i]中
-三，如果桶中已经有结点，细分以下步骤
-①判断该桶是否是红黑树结构，如果是则以红黑树的结点保存下来
-②不是红黑树结构，先保存到链表中，然后检查链表的长度是否达到阀值，达到阀值则调用treeifyBin转化成红黑树，前面说过加入结点初期时，同一个桶中的节点数可能会超过TREEIFY_THRESHOLD ，但是如果整个table的节点数不超过MIN_TREEIFY_CAPACITY ，该桶暂时不会向红黑树转化，而是对整个HashMap调用resize方法，把HashMap扩容2倍，然后把原来的table的结点转换到新的table上。
-四，如果说key已经存在，则更新value值，返回旧的value
-五，判断table的大小是否已经超过resize阀值，如果是要进行resize操作。关于resize方法后面会解析。
+
+    一，如果table为null或者table大小为0，调用resize来初始化table
+    
+    二，hash到的桶还没有保存结点，直接保存到tab[i]中
+    
+    三，如果桶中已经有结点，细分以下步骤
+    
+                ①判断该桶是否是红黑树结构，如果是则以红黑树的结点保存下来
+                
+                ②不是红黑树结构，先保存到链表中，然后检查链表的长度是否达到阀值，达到阀值则调用treeifyBin转化成红黑树，
+                前面说过加入结点初期时，同一个桶中的节点数可能会超过TREEIFY_THRESHOLD ，但是
+                如果整个table的节点数不超过MIN_TREEIFY_CAPACITY ，该桶暂时不会向红黑树转化，
+                而是对整个HashMap调用resize方法，把HashMap扩容2倍，然后把原来的table的结点转换到新的table上。
+    
+    四，如果说key已经存在，则更新value值，返回旧的value
+    
+    五，判断table的大小是否已经超过resize阀值，如果是要进行resize操作。关于resize方法后面会解析。
+    
 
 
 HashMap的get方法
@@ -135,10 +148,11 @@ final Node<K,V> getNode(int hash, Object key) {
 
 
 getNode方法可以总结如下：
-一，获取hash值对应的桶，以及该桶的首节点first
-二，如果first结点是红黑树结点，在红黑树中查找结点
-三，如果first结点是链表结点，在链表中查找
-四，返回结果值Node或null
+
+    一，获取hash值对应的桶，以及该桶的首节点first
+                        二，如果first结点是红黑树结点，在红黑树中查找结点
+                        三，如果first结点是链表结点，在链表中查找
+                        四，返回结果值Node或null
 
 HashMap的remove方法
 ```java
@@ -192,10 +206,15 @@ final Node<K,V> removeNode(int hash, Object key, Object value,
 
 
 removeNode方法可以总结如下：
-一，先找到key所对应的桶，如果key所对应的结点就在首节点，那么把node指向首节点，即要删除的结点
-二，如果key对应的结点不在桶的首节点，则该节点在链表或者红黑树中，如果桶的首节点是红黑树结点，在红黑树中查找key对应的结点，否则在链表中查找
-三，去红黑树或者链表中删除结点
-四，返回节点Node
+
+    一，先找到key所对应的桶，如果key所对应的结点就在首节点，那么把node指向首节点，
+    
+    二，如果key对应的结点不在桶的首节点，则该节点在链表或者红黑树中，如果桶的首节点是红黑树结点，
+    在红黑树中查找key对应的结点，否则在链表中查找
+    
+    三，去红黑树或者链表中删除结点
+    
+    四，返回节点Node
 
 
 HashMap的containsValue方法
@@ -215,7 +234,6 @@ public boolean containsValue(Object value) {
     }
 ```
 
-
 虽然该集合用了红黑树+链表，但是这个方法没有使用到红黑树，就是用很简单的for循环暴力搜索。
 
 
@@ -223,15 +241,15 @@ HashMap的resize方法
 调用put方法时，如果发现目前的bucket占用程度已经超过了loadFactor，就会发生resize。简单的说就是把bucket扩充为2倍，之后重新计算index，把节点再放到新的bucket中。
 方法的注释如下。
 
-/**
-     * Initializes or doubles table size.  If null, allocates in
-     * accord with initial capacity target held in field threshold.
-     * Otherwise, because we are using power-of-two expansion, the
-     * elements from each bin must either stay at same index, or move
-     * with a power of two offset in the new table.
-     *
-     * @return the table
-     */
+    /**
+         * Initializes or doubles table size.  If null, allocates in
+         * accord with initial capacity target held in field threshold.
+         * Otherwise, because we are using power-of-two expansion, the
+         * elements from each bin must either stay at same index, or move
+         * with a power of two offset in the new table.
+         *
+         * @return the table
+         */
 当超过限制的时候会resize，又因为我们使用的是2次幂的扩展，所以，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。
 
 

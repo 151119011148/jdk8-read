@@ -1,13 +1,13 @@
-#一、前言
+一、前言
 分析了HashMap的源码，里面涉及到了3个钩子函数，用来预设给子类——LinkedHashMap的调用
 
-#二、LinkedHashMap的结构与继承关系
+二、LinkedHashMap的结构与继承关系
 
 2.1 LinkedHashMap的数据结构
 
 ![LinkedHashMap](../images/LinkedHashMap.jpg)
 
-    可以从上图中看到，LinkedHashMap数据结构相比较于HashMap来说，添加了双向指针，分别指向前一个节点——before和后一个节点——after，从而将所有的节点已链表的形式串联一起来，从名字上来看LinkedHashMap与HashMap有一定的联系，实际上也确实是这样，LinkedHashMap继承了HashMap，重写了HashMap的一部分方法，从而加入了链表的实现。让我们来看一下它们的继承关系。
+可以从上图中看到，LinkedHashMap数据结构相比较于HashMap来说，添加了双向指针，分别指向前一个节点——before和后一个节点——after，从而将所有的节点已链表的形式串联一起来，从名字上来看LinkedHashMap与HashMap有一定的联系，实际上也确实是这样，LinkedHashMap继承了HashMap，重写了HashMap的一部分方法，从而加入了链表的实现。让我们来看一下它们的继承关系。
 
 2.2 LinkedHashMap的继承关系
 
@@ -15,15 +15,15 @@
 
 ![Entry](../images/LinkedHashMapEntry.png)
  
-    Entry作为基本的节点，可以看到LinkedHashMap的Entry继承自HashMap的Node，在其基础上加上了before和after两个指针，而TreeNode作为HashMap和LinkedHashMap的树节点，继承自LinkedHahsMap的Entry，并且加上了树节点的相关指针，另外提一点：before和parent的两个概念是不一样的，before是相对于链表来的，parent是相对于树操作来的，所以要分两个。
+Entry作为基本的节点，可以看到LinkedHashMap的Entry继承自HashMap的Node，在其基础上加上了before和after两个指针，而TreeNode作为HashMap和LinkedHashMap的树节点，继承自LinkedHahsMap的Entry，并且加上了树节点的相关指针，另外提一点：before和parent的两个概念是不一样的，before是相对于链表来的，parent是相对于树操作来的，所以要分两个。
 
 
 2.2.2 Iterator的继承关系
 ![LinkedHashMapEntry](../images/LinkedHashIterator.png)
 
-    LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHashIterator，对于Key、Value、Entry的3个迭代器，都继承自它。而且内部采用的遍历方式就是在前面提到的Entry里加的新的指向下一个节点的指针after，后面我们将具体看它的代码实现。
+LinkedHashMap的迭代器为遍历节点提供了自己的实现——LinkedHashIterator，对于Key、Value、Entry的3个迭代器，都继承自它。而且内部采用的遍历方式就是在前面提到的Entry里加的新的指向下一个节点的指针after，后面我们将具体看它的代码实现。
  
- #三、LinkedHashMap源码解析
+ 三、LinkedHashMap源码解析
  
  3.1 LinkedHashMap的继承关系
  
@@ -80,11 +80,11 @@
  }
 ```
 
-     从上面的代码可以看到，LinkedHashMap的get方法，调用HashMap的getNode方法后，对accessOrder的值进行了判断，我们之前提到：
-     
-     accessOrder为true则表示按照基于访问的顺序来排列，意思就是最近使用的entry，放在链表的最末尾
-     
-     由此可见，afterNodeAccess(e)就是基于访问的顺序排列的关键，让我们来看一下它的代码：
+ 从上面的代码可以看到，LinkedHashMap的get方法，调用HashMap的getNode方法后，对accessOrder的值进行了判断，我们之前提到：
+ 
+ accessOrder为true则表示按照基于访问的顺序来排列，意思就是最近使用的entry，放在链表的最末尾
+ 
+ 由此可见，afterNodeAccess(e)就是基于访问的顺序排列的关键，让我们来看一下它的代码：
  ```java
 //此函数执行的效果就是将最近使用的Node，放在链表的最末尾
  void afterNodeAccess(Node<K,V> e) {
@@ -122,13 +122,13 @@
  }
 ```
  
-    标注的情况如下图所示（特别说明一下，这里是显示链表的修改后指针的情况，实际上在桶里面的位置是不变的，只是前后的指针指向的对象变了）：
+标注的情况如下图所示（特别说明一下，这里是显示链表的修改后指针的情况，实际上在桶里面的位置是不变的，只是前后的指针指向的对象变了）：
  ![LinkedHashMap-afterBefore](../images/LinkedHashMap-afterBefore.png)
  
   下面来简单说明一下：
      
-     正常情况下：查询的p在链表中间，那么将p设置到末尾后，它原先的前节点b和后节点a就变成了前后节点。
-     
+ 正常情况下：查询的p在链表中间，那么将p设置到末尾后，它原先的前节点b和后节点a就变成了前后节点。
+ 
      情况一：p为头部，前一个节点b不存在，那么考虑到p要放到最后面，则设置p的后一个节点a为head
      情况二：p为尾部，后一个节点a不存在，那么考虑到统一操作，设置last为b
      情况三：p为链表里的第一个节点，head=p
