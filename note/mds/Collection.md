@@ -1,4 +1,5 @@
 一、前言
+
 　　今天开始阅读jdk1.8的集合部分，平时在写项目的时候，用到的最多的部分可能就是Java的集合框架，通过阅读集合框架源码，了解其内部的数据结构实现，能够深入理解各个集合的性能特性，并且能够帮助自己在今后的开发中避免犯一些使用错误。另外笔者自己也是摸着石头过河，如果有描述不当的地方，希望园友们能够不吝指出，希望能够和大家共同进步！
 
 
@@ -6,16 +7,16 @@
 
 ![Collection](../images/CollectionUml.png)
 
-可以看到集合的基础接口是Map, Collection以及Iterator。其余的类都实现自这3个类。
+　　可以看到集合的基础接口是Map, Collection以及Iterator。其余的类都实现自这3个类。
 
-蓝色为接口，红色为类，绿色为抽象类。
+　　蓝色为接口，红色为类，绿色为抽象类。
 空心三角形虚线：实现接口（implements)，好像也不太准确，列如list和collection的关系是extends。因为list是接口
 空心三角形实线：继承（extends）
 
 三、基础接口的源码解析
 3.1 Iterator接口
-
-    public interface Iterator<E> {
+```java
+public interface Iterator<E> {
       boolean hasNext();
       E next();
       default void remove() {
@@ -34,12 +35,14 @@
           action.accept(next());
       }
     }
+```
+
 　　可以看到Iterator接口还是很简单的，做到了见名知意，值得一提的是里面的remove方法：此方法可用于在迭代中删除结合中的元素，如果不用Iterator，在list循环中使用remove会抛异常。另外forEachRemaining()给出了简单的例子，里面的Consumer函数式接口有空再具体讲解。
 
 
 3.2 Collection接口
-    
-    public interface Collection<E> extends Iterable<E> {
+```java
+ public interface Collection<E> extends Iterable<E> {
       //值得一提的是:如果size超过Integer.MAX_VALUE也只会返回Integer.MAX_VALUE
       int size();
       boolean isEmpty();
@@ -101,12 +104,15 @@
         return StreamSupport.stream(spliterator(), true);
       }
     }
+```
+   
 　　需要注意的一些地方已经在注释这里特别说明过了，另外对于spliterator()，不是特别清楚的园友们，可以点击查看这里，回答的已经很详细了。
 
 
 3.3 Map接口
     
-    public interface Map<K,V> {
+```java
+public interface Map<K,V> {
       //同样的，如果size超过Integer.MAX_VALUE也只会返回Integer.MAX_VALUE
       int size();
       boolean isEmpty();
@@ -345,8 +351,11 @@
         return newValue;
       }
     }
+```
+    
 　　那么Map的接口源码阅读就到这里。
 
 
 四、总结
+
 　　总的来说，jdk1.8集合与之前版本不同的地方就是加入了很多default方法，以及使用了各种函数型接口，但总体来说还是比较好理解的。

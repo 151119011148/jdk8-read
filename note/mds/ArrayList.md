@@ -1,35 +1,33 @@
 一、前言
-在前面几篇，我们已经学习了常见了Map，下面开始阅读实现Collection接口的常见的实现类。在有了之前源码的铺垫之后，我们后面的阅读之路将会变得简单很多，因为很多Collection的结构与Map的类似，甚至有不少是直接用了Map里的方法。接下来让我们一起来看一下ArrayList的源码。
+
+　　在前面几篇，我们已经学习了常见了Map，下面开始阅读实现Collection接口的常见的实现类。在有了之前源码的铺垫之后，我们后面的阅读之路将会变得简单很多，因为很多Collection的结构与Map的类似，甚至有不少是直接用了Map里的方法。接下来让我们一起来看一下ArrayList的源码。
 
 二、ArrayList结构概览
-顾名思义，ArrayList的结构实际就是一个Object[]。所以它的特性很明显，插入一个元素的时候，是耗时是一个常量时间O(1)，在插入n个元素的时候，需要的时间就是O(n)。其他的操作中，运行的时间也是一个线性的增长（与数组中的元素个数有关）。
+
+　　顾名思义，ArrayList的结构实际就是一个Object[]。所以它的特性很明显，插入一个元素的时候，是耗时是一个常量时间O(1)，在插入n个元素的时候，需要的时间就是O(n)。其他的操作中，运行的时间也是一个线性的增长（与数组中的元素个数有关）。
 
 三、ArrayList源码阅读
 3.1 ArrayList的继承关系
 
 ![ArrayList](../images/ArrayListUml.png)
 
-其中值得一提的是RandomAccess接口，该接口的目的是这么说的：
-
+　　其中值得一提的是RandomAccess接口，该接口的目的是这么说的：
 List 实现所使用的标记接口，用来表明其支持快速（通常是固定时间）随机访问。此接口的主要目的是允许一般的算法更改其行为，从而在将其应用到随机或连续访问列表时能提供良好的性能。
-
 对于顺序访问的list，比如LinkedList，使用Iterator访问会比使用for-i来遍历list更快。这一点其实很好理解，当对于LinkedList使用get(i)的时候，由于是链表结构，所以每次都会从表头开始向下搜索，耗时肯定会多。
-
-
 对于实现RandomAccess这个接口的类，如ArrayList，我们在遍历的时候，使用for(int i = 0; i < size; i++)来遍历，其速度比使用Iterator快（接口上是这么写的）。但是笔者看源码的时候，Iterator里使用的也是i++，这种遍历，无非是增加了fail-fast判断，估计就是这个导致了性能的差距，但是没有LinkedList这么大。笔者循环了 1000 * 1000 次，贴出比较结果，仅供参考，有兴趣的朋友们可以试一试，循环次数越多越明显：
 
-----------now is arraylist----------
-使用Iterator迭代一共花了19ms时间
-使用for-i迭代一共花了9ms时间
-----------now is linkedList----------
-使用Iterator迭代一共花了17ms时间
-使用for-i迭代一共花了434ms时间
-而其继承的AbstractList主要给ArrayList提供了诸如add，get，set，remove的集合方法。
+    ----------now is arraylist----------
+    使用Iterator迭代一共花了19ms时间
+    使用for-i迭代一共花了9ms时间
+    ----------now is linkedList----------
+    使用Iterator迭代一共花了17ms时间
+    使用for-i迭代一共花了434ms时间
+    而其继承的AbstractList主要给ArrayList提供了诸如add，get，set，remove的集合方法。
 
 
 
 3.2 ArrayList的成员变量
-
+```java
     //初始化默认容量
     private static final int DEFAULT_CAPACITY = 10;
     // 空对象数组
@@ -42,22 +40,26 @@ List 实现所使用的标记接口，用来表明其支持快速（通常是固
     private int size;
     // 数组能申请的最大数量
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-特别说明一下： EMPTY_ELEMENTDATA 和 DEFAULTCAPACITY_EMPTY_ELEMENTDATA是为了在调用构造方法的时候，给elementData数组初始化，当elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA的时候，当ArrayList第一次插入元素的时候，它的数组大小将会被初始化为DEFAULT_CAPACITY。而EMPTY_ELEMENTDATA可以理解为初始化的时候size=0，下面让我们看下构造方法，来更加清楚的理解。
+```
+
+　　特别说明一下： EMPTY_ELEMENTDATA 和 DEFAULTCAPACITY_EMPTY_ELEMENTDATA是为了在调用构造方法的时候，给elementData数组初始化，当elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA的时候，当ArrayList第一次插入元素的时候，它的数组大小将会被初始化为DEFAULT_CAPACITY。而EMPTY_ELEMENTDATA可以理解为初始化的时候size=0，下面让我们看下构造方法，来更加清楚的理解。
 
 
 
 3.3 ArrayList的构造方法
 3.3.1 ArrayList()
-
+```java
     public ArrayList() {
-      this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
-    }
-当调用默认构造函数的时候，给elementData指向DEFAULTCAPACITY_EMPTY_ELEMENTDATA。
+           this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+         }
+```
+
+　　当调用默认构造函数的时候，给elementData指向DEFAULTCAPACITY_EMPTY_ELEMENTDATA。
 
 
 
 3.3.2 ArrayList(int initialCapacity)
-
+```java
     public ArrayList(int initialCapacity) {
       // 当 initialCapacity > 0 时，初始化对应大小的数组
       if (initialCapacity > 0) {
@@ -69,12 +71,13 @@ List 实现所使用的标记接口，用来表明其支持快速（通常是固
         throw new IllegalArgumentException("Illegal Capacity: "+ initialCapacity);
       }
     }
-这里当initialCapacity=0的时候，就是上述提到的情况。
+```
 
+　　这里当initialCapacity=0的时候，就是上述提到的情况。
 
 
 3.3.3 ArrayList(Collection<? extends E> c)
-
+```java
     public ArrayList(Collection<? extends E> c) {
       elementData = c.toArray();
       if ((size = elementData.length) != 0) {
@@ -86,11 +89,13 @@ List 实现所使用的标记接口，用来表明其支持快速（通常是固
         this.elementData = EMPTY_ELEMENTDATA;
       }
     }
+```
+
 
 
 3.4 ArrayList的重要方法
 3.4.1 get(int index)
-    
+```java
     public E get(int index) {
       rangeCheck(index);
       return elementData(index);
@@ -99,26 +104,31 @@ List 实现所使用的标记接口，用来表明其支持快速（通常是固
     E elementData(int index) {
       return (E) elementData[index];
     }
-get方法很简单，就是先检查index范围是否正确，正确的话从数组里取出元素。
+```    
 
+　　get方法很简单，就是先检查index范围是否正确，正确的话从数组里取出元素。
+```java
     private void rangeCheck(int index) {
       // 如果index 大于 存储的个数，则抛出异常
       if (index >= size)
         // outOfBoundsMsg里面就是简单的字符串拼接。
         throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
     }
-这里值得一提的是：这里只判断了index >= size的情况，对于index < 0的情况没有判断，是因为在获取数组值的时候，如果为负数会抛出ArrayIndexOutOfBoundsException异常。
+```
+
+　　这里值得一提的是：这里只判断了index >= size的情况，对于index < 0的情况没有判断，是因为在获取数组值的时候，如果为负数会抛出ArrayIndexOutOfBoundsException异常。
 
 
 
 3.4.2 add(E e)
-在看源码之前，我们先思考一个问题，往数组里添加元素的时候要注意什么：
 
-对于刚初始化的数组，要初始化它的大小
+　　在看源码之前，我们先思考一个问题，往数组里添加元素的时候要注意什么：
+
+　　对于刚初始化的数组，要初始化它的大小
 判断数组大小是否足够，如果不够大，扩容
 对于扩容要判断是否到达数组的最大数量
 知道这些需要考虑之后，我们再来看看它的代码：
-
+```java
     public boolean add(E e) {
       //对上述的3个前提进行判断
       ensureCapacityInternal(size + 1);
@@ -126,8 +136,10 @@ get方法很简单，就是先检查index范围是否正确，正确的话从数
       elementData[size++] = e;
       return true;
     }
-我们接着来看ensureCapacityInternal()的方法代码：
+```
 
+　　我们接着来看ensureCapacityInternal()的方法代码：
+```java
     private void ensureCapacityInternal(int minCapacity) {
       // 上述情况一：初始化数组的大小
       if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
@@ -137,10 +149,12 @@ get方法很简单，就是先检查index范围是否正确，正确的话从数
       // 检查有没有扩容的必要
       ensureExplicitCapacity(minCapacity);
     }
-ensureCapacityInternal()方法的作用就是对构造方法初始化的数组进行处理。
+```
 
-再来看一下ensureExplicitCapacity()：
+　　ensureCapacityInternal()方法的作用就是对构造方法初始化的数组进行处理。
 
+　　再来看一下ensureExplicitCapacity()：
+```java
     private void ensureExplicitCapacity(int minCapacity) {
       // 修改次数的计数器(在AbstractList中定义的)
       modCount++;
@@ -148,9 +162,11 @@ ensureCapacityInternal()方法的作用就是对构造方法初始化的数组�
       if (minCapacity - elementData.length > 0)
         grow(minCapacity);
     }
-ensureExplicitCapacity()检查是否需要扩容。
+```
 
-    private void grow(int minCapacity) {
+　　ensureExplicitCapacity()检查是否需要扩容。
+```java
+private void grow(int minCapacity) {
       // 记录旧的length
       int oldCapacity = elementData.length;
       // 扩容1.5倍, 位运算符效率更高
@@ -176,12 +192,14 @@ ensureExplicitCapacity()检查是否需要扩容。
         Integer.MAX_VALUE :
       MAX_ARRAY_SIZE;
     }
-最后的grow()扩容就是判断有没有超过数组的最大长度，以及对应的处理。
+```
+    
+　　最后的grow()扩容就是判断有没有超过数组的最大长度，以及对应的处理。
 
 
 
 3.4.3 remove(int index)
-
+```java
     public E remove(int index) {
       rangeCheck(index);
       // 修改计数器
@@ -198,13 +216,15 @@ ensureExplicitCapacity()检查是否需要扩容。
       elementData[--size] = null;
       return oldValue;
     }
-对于被删除的元素，其后面的元素需要往前移。
+```
+
+　　对于被删除的元素，其后面的元素需要往前移。
 
 
 
 3.4.4 remove(Object o)
-
-    public boolean remove(Object o) {
+```java
+public boolean remove(Object o) {
       // 判断o为null，loop遍历找到为null的元素
       if (o == null) {
         for (int index = 0; index < size; index++)
@@ -222,9 +242,11 @@ ensureExplicitCapacity()检查是否需要扩容。
       }
       return false;
     }
+```
+    
 
 // 与上面的remove(int index) 类似
-
+```java
     private void fastRemove(int index) {
       modCount++;
       int numMoved = size - index - 1;
@@ -233,10 +255,12 @@ ensureExplicitCapacity()检查是否需要扩容。
                          numMoved);
       elementData[--size] = null;
     }
+```
+
 
 
 3.4.5 set(int index, E element)
-
+```java
     public E set(int index, E element) {
       rangeCheck(index);
       // 记录旧的值
@@ -245,12 +269,14 @@ ensureExplicitCapacity()检查是否需要扩容。
       elementData[index] = element;
       return oldValue;
     }
+```
+
 设置index位置的元素值为element，返回该位置的原来的值
 
 
 
 3.4.6 addAll(Collection<? extends E> c)
-
+```java
     public boolean addAll(Collection<? extends E> c) {
       Object[] a = c.toArray();
       int numNew = a.length;
@@ -262,7 +288,7 @@ ensureExplicitCapacity()检查是否需要扩容。
       size += numNew;
       return numNew != 0;
     }
-
+```
 
 四、总结
 ArrayList在随机访问的时候，数组的结构导致访问效率比较高，但是在指定位置插入，以及删除的时候，需要移动大量的元素，导致效率低下，在使用的时候要根据场景特点来选择，另外注意循环访问的方式选择。
