@@ -4,6 +4,10 @@
 
 [基础理论知识](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Basic.md)
 
+新特性
+----------------------------------------------------------------------------------------------------------------------------------------------- 
+[JDK1.8新特性](https://github.com/151119011148/jdk8-read/tree/master/note/mds/JDK8NewFeature.md)
+
 
 集合
 -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,9 +39,15 @@
 线程
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
+[Java Memory Model与并发](https://github.com/151119011148/jdk8-read/tree/master/note/mds/JMM.md)
+
+[并发编程Volatile](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Volatile.md)
   
+[并发编程Synchronized](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Synchronized.md)  
   
-  
+[并发编程ReentrantLock](https://github.com/151119011148/jdk8-read/tree/master/note/mds/ReentrantLock.md)   
+
+[并发编程ReentrantReadWriteLock](https://github.com/151119011148/jdk8-read/tree/master/note/mds/ReentrantReadWriteLock.md)   
   
   
   
@@ -46,4 +56,7 @@
  [IO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/IO.md)
  
  [NIO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/NIO.md)
+ 
+ 
+ 
  

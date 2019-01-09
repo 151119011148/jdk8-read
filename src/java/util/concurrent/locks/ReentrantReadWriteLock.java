@@ -263,10 +263,14 @@ public class ReentrantReadWriteLock
         static final int SHARED_UNIT    = (1 << SHARED_SHIFT);
         static final int MAX_COUNT      = (1 << SHARED_SHIFT) - 1;
         static final int EXCLUSIVE_MASK = (1 << SHARED_SHIFT) - 1;
-
+        /**
+         * 这里是用state的高16位和低16位来分别表示这个锁上的读锁和写锁的加锁次数。
+         */
         /** Returns the number of shared holds represented in count  */
+        //取state的高16位，用来表示这个锁的读锁加锁次数。
         static int sharedCount(int c)    { return c >>> SHARED_SHIFT; }
         /** Returns the number of exclusive holds represented in count  */
+        //把state的低16位取出来，表示当前这个锁的写锁加锁次数。
         static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 
         /**

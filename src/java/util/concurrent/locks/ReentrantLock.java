@@ -128,21 +128,26 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          */
         final boolean nonfairTryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
+            //获取当前的状态，前面讲过，默认情况下是0表示无锁状态
             int c = getState();
             if (c == 0) {
                 if (compareAndSetState(0, acquires)) {
+                    //通过cas来改变state状态的值，如果更新成功，表示获取锁成功, 这个操作外部方法lock()就做过一次，
+                    // 这里再做只是为了再尝试一次，尽量以最简单的方式获取锁
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
+            //如果当前线程等于获取锁的线程，表示重入，直接累加重入次数
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
-                if (nextc < 0) // overflow
+                if (nextc < 0) // overflow 如果这个状态值越界，抛出异常；如果没有越界，则设置后返回true
                     throw new Error("Maximum lock count exceeded");
                 setState(nextc);
                 return true;
             }
-            return false;
+            //如果状态不为0，且当前线程不是owner，则返回false。
+            return false;//获取锁失败，返回false
         }
 
         protected final boolean tryRelease(int releases) {
@@ -203,9 +208,12 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          * acquire on failure.
          */
         final void lock() {
+            //这是跟公平锁的主要区别,一上来就试探锁是否空闲,如果可以插队，则设置获得锁的线程为当前线程
             if (compareAndSetState(0, 1))
+                //exclusiveOwnerThread属性是AQS从父类AbstractOwnableSynchronizer中继承的属性，用来保存当前占用同步状态的线程
                 setExclusiveOwnerThread(Thread.currentThread());
             else
+                //尝试去获取锁
                 acquire(1);
         }
 
