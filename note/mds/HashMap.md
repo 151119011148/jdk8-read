@@ -1,21 +1,21 @@
 HashMap简介
-类图如下:
+　　类图如下:
 
 ![HashMap](../images/HashMap.png)
 
-HashMap 是一个散列表，它存储的内容是键值对(key-value)映射，该类继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。
+　　HashMap 是一个散列表，它存储的内容是键值对(key-value)映射，该类继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。
 
-HashMap 的实现不是同步的，这意味着它不是线程安全的。它的key、value都可以为null。此外，HashMap中的映射不是有序的。
+　　HashMap 的实现不是同步的，这意味着它不是线程安全的。它的key、value都可以为null。此外，HashMap中的映射不是有序的。
  
-HashMap有两个参数影响其性能：“初始容量” 和 “加载因子”。容量是哈希表中桶的数量，初始容量DEFAULT_INITIAL_CAPACITY  只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行 rehash 操作（即重建内部数据结构），从而哈希表将具有大约两倍的桶数。
+　　HashMap有两个参数影响其性能：“初始容量” 和 “加载因子”。容量是哈希表中桶的数量，初始容量DEFAULT_INITIAL_CAPACITY  只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行 rehash 操作（即重建内部数据结构），从而哈希表将具有大约两倍的桶数。
 
-通常，默认加载因子DEFAULT_LOAD_FACTOR 是 0.75, 这是在时间和空间成本上寻求一种折衷。加载因子过高虽然减少了空间开销，但同时也增加了查询成本（在大多数 HashMap 类的操作中，包括 get 和 put 操作，都反映了这一点）。在设置初始容量时应该考虑到映射中所需的条目数及其加载因子，以便最大限度地减少 rehash 操作次数（提升性能）。如果初始容量大于最大条目数除以加载因子，则不会发生 rehash 操作。
+　　通常，默认加载因子DEFAULT_LOAD_FACTOR 是 0.75, 这是在时间和空间成本上寻求一种折衷。加载因子过高虽然减少了空间开销，但同时也增加了查询成本（在大多数 HashMap 类的操作中，包括 get 和 put 操作，都反映了这一点）。在设置初始容量时应该考虑到映射中所需的条目数及其加载因子，以便最大限度地减少 rehash 操作次数（提升性能）。如果初始容量大于最大条目数除以加载因子，则不会发生 rehash 操作。
 
 
 注意新版本HashMap的变化
 
-学习HashMap前一定要知道JDK1.8中他的实现和之前的JDK版本有了较大变化，在1.6的版本中，只使用数组+链表来实现HashMap，我们可以把数组看成一排桶连接起来，所以hash到同一个桶中的key，他们对应的结点是通过链表连接起来的。
-JDK1.8的版本中，HashMap的底层实现是基于Node数组+链表+红黑树的，结点的key如果hash到同一个桶中，一开始先使用链表来连接，当一个桶中的结点超过阀值TREEIFY_THRESHOLD 时，该桶的结构会从链表转换成红黑树。当然这其中还设计到另外一个重要的参数MIN_TREEIFY_CAPACITY （默认为64），在加入结点初期时，同一个桶中的节点数可能会超过TREEIFY_THRESHOLD ，但是如果整个table的节点数不超过MIN_TREEIFY_CAPACITY ，该桶暂时不会向红黑树转化，而是对整个HashMap调用resize方法，把HashMap扩容2倍，然后把原来的table的结点转换到新的table上。
+　　学习HashMap前一定要知道JDK1.8中他的实现和之前的JDK版本有了较大变化，在1.6的版本中，只使用数组+链表来实现HashMap，我们可以把数组看成一排桶连接起来，所以hash到同一个桶中的key，他们对应的结点是通过链表连接起来的。
+　　JDK1.8的版本中，HashMap的底层实现是基于Node数组+链表+红黑树的，结点的key如果hash到同一个桶中，一开始先使用链表来连接，当一个桶中的结点超过阀值TREEIFY_THRESHOLD 时，该桶的结构会从链表转换成红黑树。当然这其中还设计到另外一个重要的参数MIN_TREEIFY_CAPACITY （默认为64），在加入结点初期时，同一个桶中的节点数可能会超过TREEIFY_THRESHOLD ，但是如果整个table的节点数不超过MIN_TREEIFY_CAPACITY ，该桶暂时不会向红黑树转化，而是对整个HashMap调用resize方法，把HashMap扩容2倍，然后把原来的table的结点转换到新的table上。
 
 
 JDK1.6版本结构图。
@@ -40,7 +40,7 @@ static final int hash(Object key) {
     }
 ```
 
-在这个方法中，可以看到如果key为null，都是hash到0位置，否则进行(h = key.hashCode()) ^ (h >>> 16)运算获取hashCode。所以HashMap是允许key为null的情况的。
+　　在这个方法中，可以看到如果key为null，都是hash到0位置，否则进行(h = key.hashCode()) ^ (h >>> 16)运算获取hashCode。所以HashMap是允许key为null的情况的。
 
 
 HashMap的putVal方法
@@ -93,7 +93,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 ```
 
 
-putVal方法可以总结如下：
+　　putVal方法可以总结如下：
 
     一，如果table为null或者table大小为0，调用resize来初始化table
     
@@ -150,9 +150,9 @@ final Node<K,V> getNode(int hash, Object key) {
 getNode方法可以总结如下：
 
     一，获取hash值对应的桶，以及该桶的首节点first
-                        二，如果first结点是红黑树结点，在红黑树中查找结点
-                        三，如果first结点是链表结点，在链表中查找
-                        四，返回结果值Node或null
+    二，如果first结点是红黑树结点，在红黑树中查找结点
+    三，如果first结点是链表结点，在链表中查找
+    四，返回结果值Node或null
 
 HashMap的remove方法
 ```java
@@ -234,11 +234,12 @@ public boolean containsValue(Object value) {
     }
 ```
 
-虽然该集合用了红黑树+链表，但是这个方法没有使用到红黑树，就是用很简单的for循环暴力搜索。
+　　虽然该集合用了红黑树+链表，但是这个方法没有使用到红黑树，就是用很简单的for循环暴力搜索。
 
 
 HashMap的resize方法
-调用put方法时，如果发现目前的bucket占用程度已经超过了loadFactor，就会发生resize。简单的说就是把bucket扩充为2倍，之后重新计算index，把节点再放到新的bucket中。
+
+　　调用put方法时，如果发现目前的bucket占用程度已经超过了loadFactor，就会发生resize。简单的说就是把bucket扩充为2倍，之后重新计算index，把节点再放到新的bucket中。
 方法的注释如下。
 
     /**
@@ -250,16 +251,16 @@ HashMap的resize方法
          *
          * @return the table
          */
-当超过限制的时候会resize，又因为我们使用的是2次幂的扩展，所以，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。
+　　当超过限制的时候会resize，又因为我们使用的是2次幂的扩展，所以，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。
 
 
-怎么理解呢？例如我们从16扩展为32时，具体的变化如下：
+　　怎么理解呢？例如我们从16扩展为32时，具体的变化如下：
 
-假设bucket大小n=2^k，元素在重新计算hash之后，因为n变为2倍,那么新的位置就是(2^(k+1)-1)&hash。而2^(k+1)-1=2^k+2^k-1，相当于2^k-1的mask范围在高位多1bit(红色)(再次提醒，原来的长度n也是2的次幂)，这1bit非1即0。如图：
+　　假设bucket大小n=2^k，元素在重新计算hash之后，因为n变为2倍,那么新的位置就是(2^(k+1)-1)&hash。而2^(k+1)-1=2^k+2^k-1，相当于2^k-1的mask范围在高位多1bit(红色)(再次提醒，原来的长度n也是2的次幂)，这1bit非1即0。如图：
 
-所以，我们在resize的时候，不需要重新定位，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话位置没变，是1的话位置变成“原位置+oldCap”。代码比较长就不贴了，下面为16扩充为32的resize示意图：
+　　所以，我们在resize的时候，不需要重新定位，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话位置没变，是1的话位置变成“原位置+oldCap”。代码比较长就不贴了，下面为16扩充为32的resize示意图：
 
-新增的1bit是0还是1可以认为是随机的，因此resize的过程均匀的把之前的冲突的节点分散到新的bucket中了。
+　　新增的1bit是0还是1可以认为是随机的，因此resize的过程均匀的把之前的冲突的节点分散到新的bucket中了。
 
 HashMap线程不安全性
 测试以下demo。
@@ -284,7 +285,7 @@ public class HashMapInfiniteLoop {
 }
 ```
 
-在JDK1.6环境下有可能出现下面的结果。
+　　在JDK1.6环境下有可能出现下面的结果。
 第一次执行结果：
 {5=C, 3=A, 7=B}
 {5=C, 3=A, 7=B}
@@ -298,7 +299,7 @@ public class HashMapInfiniteLoop {
 {5=C, 7=B, 3=A}
 
 
-在JDK1.8环境下均有可能出现下面的结果。
+　　在JDK1.8环境下均有可能出现下面的结果。
 第一次执行结果：
 {5=C, 7=B}
 {5=C, 7=B, 3=A}
@@ -311,12 +312,13 @@ public class HashMapInfiniteLoop {
 {5=C, 7=B, 3=A}
 {5=C, 7=B, 3=A}
 
-但是上面的这些结果只是表明HashMap是线程不安全的。关于JDK1.6下HashMap多线程造成死循环的问题还要另外分析。
+　　但是上面的这些结果只是表明HashMap是线程不安全的。关于JDK1.6下HashMap多线程造成死循环的问题还要另外分析。
 
 多线程环境下HashMap如何形成死循环？
 
-多线程环境下，在JDK1.7下操作HashMap可能会引起死循环，而在JDK1.8中同样的前提下不会引起死循环。
+　　多线程环境下，在JDK1.7下操作HashMap可能会引起死循环，而在JDK1.8中同样的前提下不会引起死循环。
 原因是扩容转移后前后链表顺序不变，保持之前节点的引用关系。
-那么为什么HashMap依然是线程不安全的，通过源码看到put/get方法都没有加同步锁，
+
+　　那么为什么HashMap依然是线程不安全的，通过源码看到put/get方法都没有加同步锁，
 多线程情况最容易出现的就是：无法保证上一秒put的值，下一秒get的时候还是原值，
 建议并发情况下使用ConcurrentHashMap。

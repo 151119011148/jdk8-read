@@ -3,7 +3,7 @@ ReentrantLock
 　　锁是用来控制多个线程访问共享资源的方式，一般来说，一个锁能够防止多个线程同时访问共享资源，
 在Lock接口出现之前，Java应用程序只能依靠synchronized关键字来实现同步锁的功能，在java5以后，增加了JUC
 的并发包且提供了Lock接口用来实现锁的功能，它提供了与synchroinzed关键字类似的同步功能，只是它比
-synchronized更灵活，能够显示的获取和释放锁。
+synchronized更灵活，能够显式的获取和释放锁。
 
 　　Lock是一个接口，核心的两个方法lock和unlock，它有很多的实现，比如ReentrantLock、ReentrantReadWriteLock;
 
@@ -149,18 +149,6 @@ public class ReentrantAndUnReentrantTest {
 ![ReentrantLock](../images/非可重入锁测试结果.png)
 
 
-ReentrantReadWriteLock
-
-　　我们以前理解的锁，基本都是排他锁，也就是这些锁在同一时刻只允许一个线程进行访问，而读写所在同一时刻可
-以允许多个线程访问，但是在写线程访问时，所有的读线程和其他写线程都会被阻塞。读写锁维护了一对锁，一个
-读锁、一个写锁; 一般情况下，读写锁的性能都会比排它锁好，因为大多数场景读是多于写的。在读多于写的情况
-下，读写锁能够提供比排它锁更好的并发性和吞吐量
-    
-    读锁与读锁可以共享
-    读锁与写锁不可以共享（排他）
-    写锁与写锁不可以共享（排他）
-    
-    
 Lock和synchronized的简单对比
 
 　　通过我们对Lock的使用以及对synchronized的了解，基本上可以对比出这两种锁的区别了。因为这个也是在面试
