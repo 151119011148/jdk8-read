@@ -9,3 +9,5 @@
 [TimeAPI](https://github.com/151119011148/jdk8-read/tree/master/note/jdk8NewFeature/TimeAPITest.java)
 
 [Base64](https://github.com/151119011148/jdk8-read/tree/master/note/jdk8NewFeature/Base64Test.java)
+
+[Stream流](https://github.com/151119011148/jdk8-read/tree/master/note/jdk8NewFeature/StreamTest.java)

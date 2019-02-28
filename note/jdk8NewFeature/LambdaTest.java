@@ -7,30 +7,30 @@ import java.util.stream.Collectors;
 public class LambdaTest {
 
     public static void main(String[] args) {
-        //test1();
-        //test2();
-        //test3();
-        //test4();
-        //test5();
-        //test6();
-        //test7();
-        test8();
+            //test1();
+            //test2();
+            //test3();
+            //test4();
+            //test5();
+            //test6();
+            //test7();
+            test8();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("");
-            }
-        });
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("");
+                }
+            });
 
-        new Thread(() -> System.out.println(""));
+            new Thread(() -> System.out.println(""));
 
     }
 
 
-    /**
-     *forEach()  方法，它可以迭代所有对象，并将你的lambda代码应用在其中。
-     */
+        /**
+         *forEach()  方法，它可以迭代所有对象，并将你的lambda代码应用在其中。
+         */
     private static void test1() {
         // Java 8之前：
         List<String> features = Arrays.asList("Lambdas", "Default Method", "Stream API", "Date and Time API");

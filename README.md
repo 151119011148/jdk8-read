@@ -39,11 +39,13 @@
 线程
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
-[Java Memory Model与并发](https://github.com/151119011148/jdk8-read/tree/master/note/mds/JMM.md)
+[并发编程JMM](https://github.com/151119011148/jdk8-read/tree/master/note/mds/JMM.md)
 
 [并发编程Volatile](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Volatile.md)
   
 [并发编程Synchronized](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Synchronized.md)  
+
+[并发编程AbstractQueuedSynchronizer](https://github.com/151119011148/jdk8-read/tree/master/note/mds/AbstractQueuedSynchronizer.md)  
   
 [并发编程ReentrantLock](https://github.com/151119011148/jdk8-read/tree/master/note/mds/ReentrantLock.md)   
 
@@ -52,15 +54,31 @@
 [并发编程Condition](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Condition.md)   
 
 
-  
-  
+
   
   IO
  ----------------------------------------------------------------------------------------------------------------------------------------------- 
+ 
  [IO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/IO.md)
  
+ [BIO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/BIO.md)
+  
  [NIO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/NIO.md)
  
+ [AIO](https://github.com/151119011148/jdk8-read/tree/master/note/mds/AIO.md)
+ 
+ [Netty](https://github.com/151119011148/jdk8-read/tree/master/note/mds/Netty.md)
  
  
+ -----------------------------------------------------------------------------------------------------------------------------------------------
  
+ 
+ # mysql底层学习 
+ 
+[mysql索引](https://github.com/151119011148/study/tree/master/mysql/note/mds/index.md)
+  
+[mysql存储引擎、执行计划](https://github.com/151119011148/study/tree/master/mysql/note/mds/performanceOptimization.md)
+    
+[mysql事务、锁](https://github.com/151119011148/study/tree/master/mysql/note/mds/performanceOptimization2.md)
+  
+[mysqlMVCC](https://github.com/151119011148/study/tree/master/mysql/note/mds/performanceOptimization3.md)

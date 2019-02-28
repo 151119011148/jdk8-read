@@ -1,10 +1,12 @@
 
 Condition
 　　
-　　通过前面的课程学习，我们知道任意一个Java对象，都拥有一组监视器方法（定义在java.lang.Object上），主要包
+　　我们知道任意一个Java对象，都拥有一组监视器方法（定义在java.lang.Object上），主要包
 括wait()、notify()以及notifyAll()方法，这些方法与synchronized同步关键字配合，可以实现等待/通知模式
-JUC包提供了Condition来对锁进行精准控制，Condition是一个多线程协调通信的工具类，可以让某些线程一起等
-待某个条件（condition），只有满足条件时，线程才会被唤醒。
+
+　　JUC包提供了Condition来对锁进行精准控制，Condition是一个多线程协调通信的工具类，可以让某些线程
+一起等待某个条件（condition），只有满足条件时，线程才会被唤醒。
+
 condition使用案例
 
 ConditionWait
@@ -34,7 +36,7 @@ public class ConditionDemoWait implements Runnable{
 
 ConditionSignal
 ```java
-public class** ConditionDemoSignal implements Runnable{
+public class ConditionDemoSignal implements Runnable{
     private Lock lock;
     private Condition condition;
     public ConditionDemoSignal(Lock lock, Condition condition){
@@ -113,13 +115,11 @@ public final void signal() {
         doSignal(first);
 }
 private void doSignal(Node first) {
-do {
-if ( (firstWaiter = first.nextWaiter) == null)// 如果第一个节点的下一个节点是 null,
-那么, 最后一个节点也是 null.
-lastWaiter = null; // 将 next 节点设置成 null
-first.nextWaiter = null;
-} while (!transferForSignal(first) &&
-(first = firstWaiter) != null);
+    do {
+        if ( (firstWaiter = first.nextWaiter) == null)// 如果第一个节点的下一个节点是 null,那么, 最后一个节点也是 null.
+            lastWaiter = null; // 将 next 节点设置成 null
+            first.nextWaiter = null;
+        } while (!transferForSignal(first) && (first = firstWaiter) != null);
 }
 ```
 　　该方法先是 CAS 修改了节点状态，如果成功，就将这个节点放到 AQS 队列中，然后唤醒这个节点上的线程。此

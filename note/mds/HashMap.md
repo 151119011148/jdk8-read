@@ -5,6 +5,8 @@ HashMap简介
 
 　　HashMap 是一个散列表，它存储的内容是键值对(key-value)映射，该类继承于AbstractMap，实现了Map、Cloneable、java.io.Serializable接口。
 
+![HashMap](../images/HashMap数据结构图.png)
+
 　　HashMap 的实现不是同步的，这意味着它不是线程安全的。它的key、value都可以为null。此外，HashMap中的映射不是有序的。
  
 　　HashMap有两个参数影响其性能：“初始容量” 和 “加载因子”。容量是哈希表中桶的数量，初始容量DEFAULT_INITIAL_CAPACITY  只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行 rehash 操作（即重建内部数据结构），从而哈希表将具有大约两倍的桶数。
@@ -40,10 +42,14 @@ static final int hash(Object key) {
     }
 ```
 
-　　在这个方法中，可以看到如果key为null，都是hash到0位置，否则进行(h = key.hashCode()) ^ (h >>> 16)运算获取hashCode。所以HashMap是允许key为null的情况的。
+　　在这个方法中，可以看到如果key为null，都是hash到0位置，否则进行(h = key.hashCode()) ^ (h >>> 16)运算
+获取hashCode。所以HashMap是允许key为null的情况的。
 
 
 HashMap的putVal方法
+
+![HashMap](../images/存储位置流程确定.png) 
+
 ```java
 public V put(K key, V value) {  //平常我们使用put方法来存放key和value
         return putVal(hash(key), key, value, false, true);
@@ -322,3 +328,19 @@ public class HashMapInfiniteLoop {
 　　那么为什么HashMap依然是线程不安全的，通过源码看到put/get方法都没有加同步锁，
 多线程情况最容易出现的就是：无法保证上一秒put的值，下一秒get的时候还是原值，
 建议并发情况下使用ConcurrentHashMap。
+
+为何HashMap的数组长度一定是2的次幂？
+
+　　如果数组进行扩容，数组长度发生变化，而存储位置 index = h&(length-1),index也可能会发生变化，需要重新计算index，我们先来看看transfer这个方法：这个方法将老数组中的数据逐个链表地遍历，扔到新的扩容后的数组中，我们的数组索引位置的计算是通过 对key值的hashcode进行hash扰乱运算后，再通过和 length-1进行位运算得到最终数组索引位置。
+
+　　hashMap的数组长度一定保持2的次幂，比如16的二进制表示为 10000，那么length-1就是15，二进制为01111，同理扩容后的数组长度为32，二进制表示为100000，length-1为31，二进制表示为011111。从下图可以我们也能看到这样会保证低位全为1，而扩容后只有一位差异，也就是多出了最左位的1，这样在通过 h&(length-1)的时候，只要h对应的最左边的那一个差异位为0，就能保证得到的新的数组索引和老数组索引一致(大大减少了之前已经散列良好的老数组的数据位置重新调换)。
+
+![HashMap](../images/数组为2的次幂.png)
+
+为何重写equals方法需同时重写hashCode方法？
+
+　　如果我们已经对HashMap的原理有了一定了解，这个结果就不难理解了。尽管我们在进行get和put操作的时候，使用的key从逻辑上讲是等值的（通过equals比较是相等的），但由于没有重写hashCode方法，所以put操作时，key(hashcode1)-->hash-->indexFor-->最终索引位置 ，而通过key取出value的时候 key(hashcode1)-->hash-->indexFor-->最终索引位置，由于hashcode1不等于hashcode2，导致没有定位到一个数组位置而返回逻辑上错误的值null（也有可能碰巧定位到一个数组位置，但是也会判断其entry的hash值是否相等，上面get方法中有提到。）
+
+　　所以，在重写equals的方法的时候，必须注意重写hashCode方法，同时还要保证通过equals判断相等的两个对象，调用hashCode方法要返回同样的整数值。而如果equals判断不相等的两个对象，其hashCode可以相同（只不过会发生哈希冲突，应尽量避免）
+
+　　
